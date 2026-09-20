@@ -1,0 +1,8 @@
+================================================================================
+Linker Errors
+Generated: 2026-09-19T12:38:18.148Z
+Total Errors: 1
+================================================================================
+
+[LNK1168] (MSVC)
+cannot open C:\Users\Nikoh\source\repos\Learning\C++_test\build\Debug\MyApp.exe for writing [C:\Users\Nikoh\source\repos\Learning\C++_test\build\MyApp.vcxproj]
