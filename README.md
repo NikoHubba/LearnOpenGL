@@ -1,6 +1,20 @@
-The README will contain random notes for now.
+# Random notes
 
-First off, how GLFW's window coordinates and OpenGL's Normalized Device Coordinates (NDC) are structured:
+## Tools used to support OpenGL:
+
+- GLFW for OS-specific operations
+- GLAD to load correct implementations
+
+I plan on getting
+
+- vcpkg to manage these tools/libraries/packages
+- glm to use GLSL-like math expression in source code. Like veci.
+- fmt for python-like output formatting
+- clang-tidy to start complying with the C++ Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- Dear imGUI for in-game UI
+- Qt for external UI
+
+## How GLFW's window coordinates and OpenGL's Normalized Device Coordinates (NDC) are structured
 
 <img width="746" height="669" alt="image" src="https://github.com/user-attachments/assets/e413e105-1324-45cc-b865-7d6cf0026fcd" />
 
