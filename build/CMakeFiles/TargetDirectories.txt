@@ -1,3 +1,0 @@
-C:/Users/Nikoh/source/repos/Learning/C++_test/build/CMakeFiles/MyApp.dir
-C:/Users/Nikoh/source/repos/Learning/C++_test/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Nikoh/source/repos/Learning/C++_test/build/CMakeFiles/ZERO_CHECK.dir
