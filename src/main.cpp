@@ -29,10 +29,10 @@ float vertices2[] = {
 
 float verticesRect[] = {
     // positions          // colors           // texture coords
-     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
+     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
 };
 
 unsigned int indices[] = {  // note that we start from 0!
@@ -42,6 +42,15 @@ unsigned int indices[] = {  // note that we start from 0!
 
 #define WIDTH = 800;
 #define HEIGHT = 600;
+float weight_uniform = 0.2f;
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_DOWN && action == GLFW_REPEAT) {
+        weight_uniform -= 0.01f;
+    }
+    else if (key == GLFW_KEY_UP && action == GLFW_REPEAT) {
+        weight_uniform += 0.01f;
+    }
+}
 
 int main(){
     glfwInit();
@@ -65,7 +74,6 @@ int main(){
         return -1;
     }   
     glViewport(0, 0, 800, 600);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
     
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
     
@@ -145,6 +153,8 @@ int main(){
     glUniform1i(glGetUniformLocation(palleteshader.ID, "texture1"), 0); // set it manually
     palleteshader.setInt("texture2", 1); // or with shader class
 
+    glfwSetKeyCallback(window, key_callback);
+
     // Render loop
     while(!glfwWindowShouldClose(window))
     {
@@ -166,8 +176,10 @@ int main(){
         glDrawArrays(GL_TRIANGLES, 0, 3);
         
         
-        palleteshader.use();
 
+        palleteshader.use();
+        int weightUniform = glGetUniformLocation(palleteshader.ID, "weight");
+        glUniform1f(weightUniform, weight_uniform);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
