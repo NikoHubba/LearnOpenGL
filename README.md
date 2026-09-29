@@ -3,7 +3,7 @@
 ## Tools used:
 
 - GLFW for OS-specific operations
-- GLAD to load correct implementations
+- GLAD to load correct openGL implementations (for my GPU driver)
 - vcpkg to manage these tools/libraries/packages
 - glm to use GLSL-like math expression in source code. Like veci.
 - fmt for python-like output formatting
@@ -12,7 +12,7 @@ I plan on getting
 
 - clang-tidy to start complying with the C++ Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 - Dear imGUI for in-game UI
-- Qt for external UI
+- Qt for external UI, like a world editor etc.
 
 ## How GLFW's window coordinates and OpenGL's Normalized Device Coordinates (NDC) are structured
 
