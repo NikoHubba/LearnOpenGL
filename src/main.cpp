@@ -3,7 +3,7 @@
 #include <iostream>
 #include "shader.hpp"
 #include <stb_image.h>
-
+#include <cmath>
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }  
@@ -90,7 +90,7 @@ int main(){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load and generate the texture
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("C:/Users/Nikoh/source/repos/Learning/C++_test/src/container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("/mnt/c/Users/Nikoh/source/repos/Learning/C++_test/src/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -104,7 +104,7 @@ int main(){
     unsigned int texture2;
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    data = stbi_load("C:/Users/Nikoh/source/repos/Learning/C++_test/src/awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("/mnt/c/Users/Nikoh/source/repos/Learning/C++_test/src/awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -130,8 +130,8 @@ int main(){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
     // Shader
-    Shader palleteshader = Shader("../../src/shaders/shader.vs", "../../src/shaders/paletteshader.fs");
-    Shader pulsingshader = Shader("../../src/shaders/shader.vs", "../../src/shaders/pulsingshader.fs");
+    Shader palleteshader = Shader("../src/shaders/shader.vs", "../src/shaders/paletteshader.fs");
+    Shader pulsingshader = Shader("../src/shaders/shader.vs", "../src/shaders/pulsingshader.fs");
     
     glBindVertexArray(VAOs[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
@@ -166,7 +166,7 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT);
         pulsingshader.use();
         float timeValue = float(glfwGetTime());
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        float greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
         int vertexColorLocation = glGetUniformLocation(pulsingshader.ID, "ourColor");
         glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
         int vertexOffset = glGetUniformLocation(pulsingshader.ID, "offset");
