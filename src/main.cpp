@@ -4,6 +4,10 @@
 #include "shader.hpp"
 #include <stb_image.h>
 #include <cmath>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }  
@@ -130,8 +134,8 @@ int main(){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
     // Shader
-    Shader palleteshader = Shader("../src/shaders/shader.vs", "../src/shaders/paletteshader.fs");
-    Shader pulsingshader = Shader("../src/shaders/shader.vs", "../src/shaders/pulsingshader.fs");
+    Shader palleteshader = Shader("../src/shaders/shader.vert", "../src/shaders/paletteshader.frag");
+    Shader pulsingshader = Shader("../src/shaders/shader.vert", "../src/shaders/pulsingshader.frag");
     
     glBindVertexArray(VAOs[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
@@ -155,12 +159,20 @@ int main(){
 
     glfwSetKeyCallback(window, key_callback);
 
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    // trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));  // Rotating by 90 degrees, equivalent to 0.5 radian
+    // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));                        // Svale everything by 0.5
+    // vec = trans * vec;
+    std::cout << vec.x << ", " << vec.y << ", " << vec.z << std::endl;
+    
+    glm::mat4 id_mat = glm::mat4(1.0f);
+    
     // Render loop
     while(!glfwWindowShouldClose(window))
     {
         // input
         processInput(window);
-
+        
         // Rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -171,14 +183,23 @@ int main(){
         glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
         int vertexOffset = glGetUniformLocation(pulsingshader.ID, "offset");
         glUniform4f(vertexOffset, -0.7f, 0, 0, 0);
-
+        unsigned int transformLoc = glGetUniformLocation(palleteshader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(id_mat));
+        
+        
         glBindVertexArray(VAOs[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         
         
-
+        
         palleteshader.use();
         int weightUniform = glGetUniformLocation(palleteshader.ID, "weight");
+        glm::mat4 trans = glm::mat4(1.0f); // Identity matrix.
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.5f));
+        trans = glm::rotate(trans, timeValue, glm::vec3(0.0f, 0.0f, 1.0f));
+        transformLoc = glGetUniformLocation(palleteshader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
         glUniform1f(weightUniform, weight_uniform);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -187,6 +208,12 @@ int main(){
         
         glBindVertexArray(VAOs[1]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        float sin = (std::sin(timeValue) / 2.0f) + 0.5f;
+        trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(-0.5, 0.5f, 0.5f));
+        trans = glm::scale(trans, glm::vec3(sin, sin, sin));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
 
